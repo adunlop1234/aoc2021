@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+'''
+Template file for each new challenge.
+'''
+
 # Import helper functions
 import functools
 
@@ -11,8 +15,8 @@ PROBLEM_FILENAME = str(VERSION) + ".txt"
 def main():
     
     # Get the input lines for example and full problem
-    example_lines = helper.get_input_lines(EXAMPLE_FILENAME)
-    problem_lines = helper.get_input_lines(PROBLEM_FILENAME)
+    example_lines = get_input_lines(EXAMPLE_FILENAME)
+    problem_lines = get_input_lines(PROBLEM_FILENAME)
 
     # Perform function one on example and input lines
     part_one(example_lines)
