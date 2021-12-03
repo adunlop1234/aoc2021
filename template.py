@@ -7,6 +7,7 @@ Template file for each new challenge.
 # Import helper functions
 import functools
 import os, sys
+import numpy as np
 
 # Specify the filename
 VERSION = os.getcwd().split(os.path.sep)[-1].split('.')[0]
