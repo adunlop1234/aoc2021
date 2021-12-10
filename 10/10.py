@@ -44,11 +44,60 @@ def get_input_lines(filename):
 
 @print_result
 def part_one(lines):
-    pass
+    
+    opening_characters = ['(', '[', '{', '<']
+    closing_characters = [')', ']', '}', '>']
+    valid_closing_characters = {opening : closing for opening, closing in zip(opening_characters, closing_characters)}
+    closing_character_score = {closing : score for closing, score in zip(closing_characters, [3, 57, 1197, 25137])}
+
+    stack = []
+    score = 0
+
+    for line in lines:
+
+        for character in list(line):
+            if character in opening_characters:
+                stack.append(character)
+
+            elif character in closing_characters:
+                if valid_closing_characters[stack.pop(-1)] != character:
+                    #print("Invalid closing character found: " + character)
+                    score += closing_character_score[character]
+                    break
+
+    return score
 
 @print_result
 def part_two(lines):
-    pass
+
+    opening_characters = ['(', '[', '{', '<']
+    closing_characters = [')', ']', '}', '>']
+    valid_closing_characters = {opening : closing for opening, closing in zip(opening_characters, closing_characters)}
+    closing_character_score = {closing : score for closing, score in zip(closing_characters, [1, 2, 3, 4])}
+
+    scores = []
+
+    for line in lines:
+        incomplete_line = True
+        score = 0
+        stack = []
+        for character in list(line):
+            if character in opening_characters:
+                stack.append(character)
+
+            elif character in closing_characters:
+                if valid_closing_characters[stack.pop(-1)] != character:
+                    incomplete_line = False
+                    break
+        
+        if incomplete_line:
+            for character in reversed(stack):
+                score *= 5
+                score += closing_character_score[valid_closing_characters[character]]
+
+            scores.append(score)
+
+    return sorted(scores)[int(len(scores)/2)]
 
 if __name__ == "__main__":
     main()
