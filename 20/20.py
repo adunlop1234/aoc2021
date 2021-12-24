@@ -8,7 +8,6 @@ Template file for each new challenge.
 import functools
 import os, sys
 import numpy as np
-from numpy.lib.arraypad import pad
 
 # Specify the filename
 VERSION = os.getcwd().split(os.path.sep)[-1].split('.')[0]
@@ -56,44 +55,47 @@ def part_two(lines):
     return enhance_image(image, algorithm, 50)
 
 def enhance_image(image, algorithm, steps):
+
+    # Set padding sufficiently large to ignore edge effects
     padding_amount = 100
     image = np.pad(image, padding_amount)
 
     new_image = np.zeros(image.shape, dtype=int)
     i_max, j_max = image.shape[0]-1, image.shape[1]-1
 
+    # Loop for specified number of steps
     step = 0
-    #for row in image:
-        #print(''.join(['#' if item else '.' for item in row]))
     while step < steps:
         for i, row in enumerate(image):
+
+            # If at the edge don't perform calculation as no 3x3 grid
             if i == 0 or i == i_max:
                 continue
+
+            # Perform kernal on each item in row
             for j, item in enumerate(row):
                 if j == 0 or j == j_max:
                     continue
                 
+                # Get the new number
                 converted_number = ''
                 for a in range(-1, 2):
                     for b in range(-1, 2):
-                        #print(image[i+a, j+b])
                         converted_number += str(image[i+a, j+b])
-
                 converted_number = algorithm[int(converted_number, 2)]
+
+                # Replace number in next image
                 if converted_number == '#': 
                     converted_number = 1
                 else: 
                     converted_number = 0
                 new_image[i, j] = converted_number
 
+        # Set new image to be current image and repeat
         step += 1
         image = new_image.copy()
-        for row in new_image:
-            #print(''.join(['#' if item else '.' for item in row]))
-            pass
-        print(step)
     
-    #print(padding_amount, i_max, j_max)
+    # Get the sum range ignoring the edges
     delta = steps+1
     return image[padding_amount-delta:i_max-padding_amount+delta, padding_amount-delta:j_max-padding_amount+delta].sum().sum()
 
